@@ -3,11 +3,7 @@
 namespace Hofff\Contao\CommentsLatest\Frontend;
 
 use Contao\CommentsModel;
-use Contao\ContentModel;
 use Contao\Module;
-use Contao\NewsModel;
-use Contao\PageModel;
-use Hofff\Contao\CommentsLatest\Util\ContaoNewsUtil;
 
 /**
  * @author Oliver Hoff <oliver@hofff.com>
@@ -15,51 +11,54 @@ use Hofff\Contao\CommentsLatest\Util\ContaoNewsUtil;
 class ModuleCommentsLatest extends Module {
 
 	/**
-	 * @var array<integer>
-	 */
-	private $ids;
-
-	/**
-	 * @see \Contao\Module::generate()
-	 */
-	public function generate() {
-		$sql = <<<SQL
-SELECT
-	id
-FROM
-	tl_comments
-WHERE
-	published = 1
-	AND source IN ('tl_news', 'tl_page', 'tl_content')
-ORDER BY
-	tstamp DESC
-SQL;
-		$this->ids = \Database::getInstance()->prepare($sql)->limit($this->numberOfItems)->execute()->fetchEach('id');
-
-		if(!$this->ids) {
-			return '';
-		}
-
-		return parent::generate();
-	}
-
-	/**
 	 * @see \Contao\Module::compile()
 	 */
 	protected function compile() {
-		$comments = CommentsModel::findMultipleByIds($this->ids);
+		$items = [];
+		foreach($this->fetchComments() as $comment) {
+			$item = [];
+			$item['comment'] = $comment;
 
-		foreach($comments as $comment) {
-			if($comment->source == 'tl_page') {
-				$comment->href = PageModel::findById($comment->parent)->getFrontendUrl();
-			} elseif($comment->source == 'tl_content') {
-				$comment->href = ContentModel::findById($comment->parent)->getRelated('pid')->getRelated('pid')->getFrontendUrl();
-			} else {
-				$comment->href = ContaoNewsUtil::getNewsURL(NewsModel::findById($comment->parent));
-			}
+			$items[] = $item;
 		}
 
-		$this->Template->comments = $comments;
+		$items = $this->executeHook($items);
+
+		$this->Template->items = $items;
+	}
+
+	/**
+	 * @return array<CommentsModel>
+	 */
+	public function fetchComments() {
+		$comments = CommentsModel::findByPublished(1, [
+			'limit'	=> $this->numberOfItems,
+			'order'	=> 'date DESC',
+		]);
+
+		return $comments ? $comments->getModels() : [];
+	}
+
+	/**
+	 * @param array
+	 * @return array
+	 */
+	protected function executeHook(array $items) {
+		$hooks = &$GLOBALS['TL_HOOKS']['hofff_comments_compile'];
+
+		if(!isset($hooks) || !is_array($hooks)) {
+			return $items;
+		}
+
+		foreach($hooks as $callback) {
+			$items = call_user_func(
+				[ \System::importStatic($callback[0]), $callback[1] ],
+				$items,
+				$this
+			);
+		}
+
+		return $items;
 	}
 
 }

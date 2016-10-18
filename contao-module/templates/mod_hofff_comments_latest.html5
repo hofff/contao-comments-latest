@@ -5,12 +5,11 @@ $format = $GLOBALS['objPage'] ? $GLOBALS['objPage']->datimFormat : Config::get('
 
 <?php $this->block('content'); ?>
 
-<?php foreach($this->comments as $comment): ?>
-  <p><?= \Date::parse($format, $comment->date) ?> <?= $comment->name ?></p>
-  <div><?= $comment->content ?></div>
-  <a href="<?= $comment->href ?>">
-    <?= $GLOBALS['TL_LANG']['MSC']['more'] ?>
-  </a>
+<?php foreach($this->items as $item): ?>
+  <h4><?= $item['title'] ?></h4>
+  <p><?= \Date::parse($format, $item['comment']->date) ?> <?= $item['comment']->name ?></p>
+  <div><?= $item['comment']->comment ?></div>
+  <a href="<?= $item['href'] ?>"><?= $GLOBALS['TL_LANG']['MSC']['more'] ?></a>
 <?php endforeach; ?>
 
 <?php $this->endblock(); ?>
