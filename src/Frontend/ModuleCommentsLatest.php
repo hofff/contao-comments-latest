@@ -11,6 +11,23 @@ use Contao\Module;
 class ModuleCommentsLatest extends Module {
 
 	/**
+	 * @see \Contao\Module::generate()
+	 */
+	public function generate() {
+		if(TL_MODE == 'BE') {
+			$tpl = new \BackendTemplate('be_wildcard');
+			$tpl->wildcard	= '### LATEST COMMENTS ###';
+			$tpl->title		= $this->headline;
+			$tpl->id		= $this->id;
+			$tpl->link		= $this->name;
+			$tpl->href		= 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
+			return $tpl->parse();
+		}
+
+		return parent::generate();
+	}
+
+	/**
 	 * @see \Contao\Module::compile()
 	 */
 	protected function compile() {
