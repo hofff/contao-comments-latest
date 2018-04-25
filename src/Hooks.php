@@ -18,18 +18,22 @@ class Hooks {
 	 * @return array
 	 */
 	public static function hookCommentsCompilePage(array $items) {
-		foreach($items as &$item) {
+		return array_filter($items, function(array &$item) {
 			if($item['comment']->source != 'tl_page') {
-				continue;
+				return true;
 			}
 
-			$page = PageModel::findById($item['comment']->parent);
+			try {
+				$page = PageModel::findById($item['comment']->parent);
 
-			$item['href'] = $page->getFrontendUrl();
-			$item['title'] = $page->pageTitle ?: $page->title;
-		}
+				$item['href'] = $page->getFrontendUrl();
+				$item['title'] = $page->pageTitle ?: $page->title;
+			} catch(\Exception $e) {
+				return false;
+			}
 
-		return $items;
+			return true;
+		});
 	}
 
 	/**
@@ -37,20 +41,24 @@ class Hooks {
 	 * @return array
 	 */
 	public static function hookCommentsCompileContent(array $items) {
-		foreach($items as &$item) {
+		return array_filter($items, function(array &$item) {
 			if($item['comment']->source != 'tl_content') {
-				continue;
+				return true;
 			}
 
-			$content = ContentModel::findById($item['comment']->parent);
-			$article = ArticleModel::findById($content->pid);
-			$page = PageModel::findById($article->pid);
+			try {
+				$content = ContentModel::findById($item['comment']->parent);
+				$article = ArticleModel::findById($content->pid);
+				$page = PageModel::findById($article->pid);
 
-			$item['href'] = $page->getFrontendUrl();
-			$item['title'] = $page->pageTitle ?: $page->title;
-		}
+				$item['href'] = $page->getFrontendUrl();
+				$item['title'] = $page->pageTitle ?: $page->title;
+			} catch(\Exception $e) {
+				return false;
+			}
 
-		return $items;
+			return true;
+		});
 	}
 
 	/**
@@ -58,18 +66,22 @@ class Hooks {
 	 * @return array
 	 */
 	public static function hookCommentsCompileNews(array $items) {
-		foreach($items as &$item) {
+		return array_filter($items, function(array &$item) {
 			if($item['comment']->source != 'tl_news') {
-				continue;
+				return true;
 			}
 
-			$news = NewsModel::findById($item['comment']->parent);
+			try {
+				$news = NewsModel::findById($item['comment']->parent);
 
-			$item['href'] = ContaoNewsUtil::getNewsURL($news);
-			$item['title'] = $news->headline;
-		}
+				$item['href'] = ContaoNewsUtil::getNewsURL($news);
+				$item['title'] = $news->headline;
+			} catch(\Exception $e) {
+				return false;
+			}
 
-		return $items;
+			return true;
+		});
 	}
 
 }
