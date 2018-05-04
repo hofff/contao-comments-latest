@@ -18,9 +18,12 @@ class Hooks {
 	 * @return array
 	 */
 	public static function hookCommentsCompilePage(array $items) {
-		return array_filter($items, function(array &$item) {
+		$compiled = [];
+
+		foreach($items as $item) {
 			if($item['comment']->source != 'tl_page') {
-				return true;
+				$compiled[] = $item;
+				continue;
 			}
 
 			try {
@@ -29,11 +32,13 @@ class Hooks {
 				$item['href'] = $page->getFrontendUrl();
 				$item['title'] = $page->pageTitle ?: $page->title;
 			} catch(\Exception $e) {
-				return false;
+				continue;
 			}
 
-			return true;
-		});
+			$compiled[] = $item;
+		}
+
+		return $compiled;
 	}
 
 	/**
@@ -41,9 +46,12 @@ class Hooks {
 	 * @return array
 	 */
 	public static function hookCommentsCompileContent(array $items) {
-		return array_filter($items, function(array &$item) {
+		$compiled = [];
+
+		foreach($items as $item) {
 			if($item['comment']->source != 'tl_content') {
-				return true;
+				$compiled[] = $item;
+				continue;
 			}
 
 			try {
@@ -54,11 +62,13 @@ class Hooks {
 				$item['href'] = $page->getFrontendUrl();
 				$item['title'] = $page->pageTitle ?: $page->title;
 			} catch(\Exception $e) {
-				return false;
+				continue;
 			}
 
-			return true;
-		});
+			$compiled[] = $item;
+		}
+
+		return $compiled;
 	}
 
 	/**
@@ -66,9 +76,12 @@ class Hooks {
 	 * @return array
 	 */
 	public static function hookCommentsCompileNews(array $items) {
-		return array_filter($items, function(array &$item) {
+		$compiled = [];
+
+		foreach($items as $item) {
 			if($item['comment']->source != 'tl_news') {
-				return true;
+				$compiled[] = $item;
+				continue;
 			}
 
 			try {
@@ -77,11 +90,13 @@ class Hooks {
 				$item['href'] = ContaoNewsUtil::getNewsURL($news);
 				$item['title'] = $news->headline;
 			} catch(\Exception $e) {
-				return false;
+				continue;
 			}
 
-			return true;
-		});
+			$compiled[] = $item;
+		}
+
+		return $compiled;
 	}
 
 }
