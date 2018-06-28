@@ -31,7 +31,7 @@ class Hooks {
 
 				$item['href'] = $page->getFrontendUrl();
 				$item['title'] = $page->pageTitle ?: $page->title;
-			} catch(\Exception $e) {
+			} catch(\Throwable $e) {
 				continue;
 			}
 
@@ -61,7 +61,7 @@ class Hooks {
 
 				$item['href'] = $page->getFrontendUrl();
 				$item['title'] = $page->pageTitle ?: $page->title;
-			} catch(\Exception $e) {
+			} catch(\Throwable $e) {
 				continue;
 			}
 
@@ -89,7 +89,7 @@ class Hooks {
 
 				$item['href'] = ContaoNewsUtil::getNewsURL($news);
 				$item['title'] = $news->headline;
-			} catch(\Exception $e) {
+			} catch(\Throwable $e) {
 				continue;
 			}
 
