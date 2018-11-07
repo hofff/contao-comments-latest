@@ -14,11 +14,15 @@ use function is_array;
  */
 final class ModuleCommentsLatest extends Module
 {
+    /**
+     * @var string
+     */
+    protected $strTemplate = 'mod_hofff_comments_latest';
 
     /**
      * @see \Contao\Module::generate()
      */
-    public function generate()
+    public function generate(): string
     {
         if (TL_MODE === 'BE') {
             $tpl           = new \BackendTemplate('be_wildcard');
@@ -37,7 +41,7 @@ final class ModuleCommentsLatest extends Module
     /**
      * @see \Contao\Module::compile()
      */
-    protected function compile()
+    protected function compile(): void
     {
         $items = [];
         foreach ($this->fetchComments() as $comment) {
@@ -91,5 +95,4 @@ final class ModuleCommentsLatest extends Module
 
         return $items;
     }
-
 }
