@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Hofff\Contao\CommentsLatest\EventListener\HookSubscriber;
 use Hofff\Contao\CommentsLatest\Frontend\ModuleCommentsLatest;
 
