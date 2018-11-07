@@ -1,6 +1,6 @@
 <?php
 
-namespace Hofff\Contao\CommentsLatest;
+namespace Hofff\Contao\CommentsLatest\EventListener;
 
 use Contao\ArticleModel;
 use Contao\ContentModel;
@@ -11,7 +11,7 @@ use Hofff\Contao\CommentsLatest\Util\ContaoNewsUtil;
 /**
  * @author Oliver Hoff <oliver@hofff.com>
  */
-class Hooks {
+class HookSubscriber {
 
 	/**
 	 * @param array $items
