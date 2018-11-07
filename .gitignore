@@ -1,7 +1,6 @@
 /*
+!/.composer-require-checker.json
 !/.gitignore
-!/contao-module/
-!/runonce/
 !/src/
 !/README.md
 !/composer.json

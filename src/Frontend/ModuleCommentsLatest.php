@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\CommentsLatest\Frontend;
 
+use Contao\BackendTemplate;
 use Contao\CommentsModel;
 use Contao\Module;
 use function call_user_func;
@@ -25,7 +26,7 @@ final class ModuleCommentsLatest extends Module
     public function generate(): string
     {
         if (TL_MODE === 'BE') {
-            $tpl           = new \BackendTemplate('be_wildcard');
+            $tpl           = new BackendTemplate('be_wildcard');
             $tpl->wildcard = '### LATEST COMMENTS ###';
             $tpl->title    = $this->headline;
             $tpl->id       = $this->id;
