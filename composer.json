@@ -35,7 +35,14 @@
 		"symfony/dependency-injection": "^3.3 || ^4.0"
 	},
 	"require-dev": {
-		"contao/manager-plugin": "^2.0"
+		"contao/manager-plugin": "^2.0",
+		"contao/news-bundle": "^4.4"
+	},
+	"conflict": {
+		"contao/news-bundle": "<4.4 || >=5.0"
+	},
+	"suggest": {
+		"contao/news-bundle": "Install news bundle for fetching latest comments of the news"
 	},
 	"autoload": {
 		"psr-4": {

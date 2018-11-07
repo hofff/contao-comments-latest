@@ -15,6 +15,22 @@ use Hofff\Contao\CommentsLatest\Util\ContaoNewsUtil;
  */
 final class HookSubscriber
 {
+    /**
+     * Active bundles.
+     *
+     * @var array
+     */
+    private $bundles;
+
+    /**
+     * HookSubscriber constructor.
+     *
+     * @param array $bundles
+     */
+    public function __construct(array $bundles)
+    {
+        $this->bundles = $bundles;
+    }
 
     /**
      * @param array $items
@@ -85,6 +101,10 @@ final class HookSubscriber
      */
     public function hookCommentsCompileNews(array $items): array
     {
+        if (!isset($this->bundles['ContaoNewsBundle'])) {
+            return $items;
+        }
+
         $compiled = [];
 
         foreach ($items as $item) {
