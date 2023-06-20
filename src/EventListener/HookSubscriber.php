@@ -9,6 +9,7 @@ use Contao\ContentModel;
 use Contao\NewsModel;
 use Contao\PageModel;
 use Hofff\Contao\CommentsLatest\Util\ContaoNewsUtil;
+use Throwable;
 
 /**
  * @author Oliver Hoff <oliver@hofff.com>
@@ -52,7 +53,7 @@ final class HookSubscriber
 
                 $item['href']  = $page->getFrontendUrl();
                 $item['title'] = $page->pageTitle ?: $page->title;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 continue;
             }
 
@@ -84,7 +85,7 @@ final class HookSubscriber
 
                 $item['href']  = $page->getFrontendUrl();
                 $item['title'] = $page->pageTitle ?: $page->title;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 continue;
             }
 
@@ -118,7 +119,7 @@ final class HookSubscriber
 
                 $item['href']  = ContaoNewsUtil::getNewsURL($news);
                 $item['title'] = $news->headline;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 continue;
             }
 

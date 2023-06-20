@@ -21,7 +21,7 @@ final class ModuleCommentsLatest extends Module
     protected $strTemplate = 'mod_hofff_comments_latest';
 
     /**
-     * @see \Contao\Module::generate()
+     * @see Module::generate
      */
     public function generate(): string
     {
@@ -31,7 +31,7 @@ final class ModuleCommentsLatest extends Module
             $tpl->title    = $this->headline;
             $tpl->id       = $this->id;
             $tpl->link     = $this->name;
-            $tpl->href     = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
+            $tpl->href     = 'contao?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
 
             return $tpl->parse();
         }
@@ -40,7 +40,7 @@ final class ModuleCommentsLatest extends Module
     }
 
     /**
-     * @see \Contao\Module::compile()
+     * @see Module::compile
      */
     protected function compile(): void
     {
