@@ -6,44 +6,31 @@ namespace Hofff\Contao\CommentsLatest\EventListener;
 
 use Contao\ArticleModel;
 use Contao\ContentModel;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\NewsModel;
 use Contao\PageModel;
 use Hofff\Contao\CommentsLatest\Util\ContaoNewsUtil;
 use Throwable;
 
-/**
- * @author Oliver Hoff <oliver@hofff.com>
- */
 final class HookSubscriber
 {
     /**
      * Active bundles.
-     *
-     * @var array
      */
-    private $bundles;
+    private array $bundles;
 
-    /**
-     * HookSubscriber constructor.
-     *
-     * @param array $bundles
-     */
     public function __construct(array $bundles)
     {
         $this->bundles = $bundles;
     }
 
-    /**
-     * @param array $items
-     *
-     * @return array
-     */
+    #[AsHook('hofff_comments_compile')]
     public function hookCommentsCompilePage(array $items): array
     {
         $compiled = [];
 
         foreach ($items as $item) {
-            if ($item['comment']->source != 'tl_page') {
+            if ($item['comment']->source !== 'tl_page') {
                 $compiled[] = $item;
                 continue;
             }
@@ -53,7 +40,7 @@ final class HookSubscriber
 
                 $item['href']  = $page->getFrontendUrl();
                 $item['title'] = $page->pageTitle ?: $page->title;
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 continue;
             }
 
@@ -63,17 +50,13 @@ final class HookSubscriber
         return $compiled;
     }
 
-    /**
-     * @param array $items
-     *
-     * @return array
-     */
+    #[AsHook('hofff_comments_compile')]
     public function hookCommentsCompileContent(array $items): array
     {
         $compiled = [];
 
         foreach ($items as $item) {
-            if ($item['comment']->source != 'tl_content') {
+            if ($item['comment']->source !== 'tl_content') {
                 $compiled[] = $item;
                 continue;
             }
@@ -85,7 +68,7 @@ final class HookSubscriber
 
                 $item['href']  = $page->getFrontendUrl();
                 $item['title'] = $page->pageTitle ?: $page->title;
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 continue;
             }
 
@@ -95,21 +78,17 @@ final class HookSubscriber
         return $compiled;
     }
 
-    /**
-     * @param array $items
-     *
-     * @return array
-     */
+    #[AsHook('hofff_comments_compile')]
     public function hookCommentsCompileNews(array $items): array
     {
-        if (!isset($this->bundles['ContaoNewsBundle'])) {
+        if (! isset($this->bundles['ContaoNewsBundle'])) {
             return $items;
         }
 
         $compiled = [];
 
         foreach ($items as $item) {
-            if ($item['comment']->source != 'tl_news') {
+            if ($item['comment']->source !== 'tl_news') {
                 $compiled[] = $item;
                 continue;
             }
@@ -119,7 +98,7 @@ final class HookSubscriber
 
                 $item['href']  = ContaoNewsUtil::getNewsURL($news);
                 $item['title'] = $news->headline;
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 continue;
             }
 

@@ -5,7 +5,7 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Hofff\Contao\CommentsLatest\EventListener\HookSubscriber" public="true">
+        <service id="Hofff\Contao\CommentsLatest\EventListener\HookSubscriber" autoconfigure="true">
             <argument>%kernel.bundles%</argument>
         </service>
     </services>
