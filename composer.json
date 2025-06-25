@@ -61,7 +61,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.0.x-dev",
+      "dev-master": "2.2.x-dev",
       "dev-support/1.x": "1.0.x-dev"
     },
     "contao-manager-plugin": "Hofff\\Contao\\CommentsLatest\\ContaoManager\\Plugin"
