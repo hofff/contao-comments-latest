@@ -1,6 +1,8 @@
 {
   "name": "hofff/contao-comments-latest",
   "description": "Frontend-Module for Contao CMS to display latest comments.",
+  "license": "LGPL-3.0-or-later",
+  "type": "contao-bundle",
   "keywords": [
     "module",
     "content",
@@ -8,9 +10,6 @@
     "article",
     "contao"
   ],
-  "type": "contao-bundle",
-  "license": "LGPL-3.0-or-later",
-  "homepage": "http://hofff.com/",
   "authors": [
     {
       "name": "Oliver Hoff",
@@ -19,27 +18,19 @@
       "role": "Developer"
     }
   ],
+  "homepage": "http://hofff.com/",
   "support": {
     "issues": "https://github.com/hofff/contao-comments-latest/issues",
     "source": "https://github.com/hofff/contao-comments-latest"
   },
-  "config": {
-    "preferred-install": "dist",
-    "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "contao/manager-plugin": true,
-      "contao-components/installer": true,
-      "php-http/discovery": true
-    },
-    "sort-packages": true
-  },
   "require": {
     "php": "^8.1",
-    "contao/core-bundle": "^4.13 || ^5.3",
     "contao/comments-bundle": "^4.13 || ^5.3",
-    "symfony/http-kernel": "^5.4 || ^6.4 || ^7.0",
+    "contao/core-bundle": "^4.13 || ^5.3",
     "symfony/config": "^5.4 || ^6.4 || ^7.0",
-    "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0"
+    "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
+    "symfony/http-foundation": "^5.4 || ^6.4 || ^7.0",
+    "symfony/http-kernel": "^5.4 || ^6.4 || ^7.0"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.1",
@@ -47,8 +38,8 @@
     "phpcq/runner-bootstrap": "@dev"
   },
   "conflict": {
-    "contao/news-bundle": "<4.13 || >=5.0",
-    "contao/manager-plugin": "<2.1 || >= 3.0"
+    "contao/manager-plugin": "<2.1 || >= 3.0",
+    "contao/news-bundle": "<4.13 || >=5.0"
   },
   "suggest": {
     "contao/news-bundle": "Install news bundle for fetching latest comments of the news"
@@ -58,11 +49,21 @@
       "Hofff\\Contao\\CommentsLatest\\": "src/"
     }
   },
+  "config": {
+    "allow-plugins": {
+      "contao-components/installer": true,
+      "contao/manager-plugin": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "php-http/discovery": true
+    },
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
   "extra": {
-    "contao-manager-plugin": "Hofff\\Contao\\CommentsLatest\\ContaoManager\\Plugin",
     "branch-alias": {
       "dev-master": "2.0.x-dev",
       "dev-support/1.x": "1.0.x-dev"
-    }
+    },
+    "contao-manager-plugin": "Hofff\\Contao\\CommentsLatest\\ContaoManager\\Plugin"
   }
 }

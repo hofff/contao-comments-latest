@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\CommentsLatest\EventListener;
 
 use Contao\ArticleModel;
+use Contao\CommentsModel;
 use Contao\ContentModel;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\NewsModel;
@@ -14,16 +15,16 @@ use Throwable;
 
 final class HookSubscriber
 {
-    /**
-     * Active bundles.
-     */
-    private array $bundles;
-
-    public function __construct(array $bundles)
+    /** @param array<string, string> $bundles Active bundles. */
+    public function __construct(private readonly array $bundles)
     {
-        $this->bundles = $bundles;
     }
 
+    /**
+     * @param list<array{comment: CommentsModel}> $items
+     *
+     * @return list<array{comment: CommentsModel, href?: string, title?: string}>
+     */
     #[AsHook('hofff_comments_compile')]
     public function hookCommentsCompilePage(array $items): array
     {
@@ -37,6 +38,9 @@ final class HookSubscriber
 
             try {
                 $page = PageModel::findById($item['comment']->parent);
+                if ($page === null) {
+                    continue;
+                }
 
                 $item['href']  = $page->getFrontendUrl();
                 $item['title'] = $page->pageTitle ?: $page->title;
@@ -50,6 +54,11 @@ final class HookSubscriber
         return $compiled;
     }
 
+    /**
+     * @param list<array{comment: CommentsModel}> $items
+     *
+     * @return list<array{comment: CommentsModel, href?: string, title?: string}>
+     */
     #[AsHook('hofff_comments_compile')]
     public function hookCommentsCompileContent(array $items): array
     {
@@ -63,8 +72,19 @@ final class HookSubscriber
 
             try {
                 $content = ContentModel::findById($item['comment']->parent);
+                if ($content === null) {
+                    continue;
+                }
+
                 $article = ArticleModel::findById($content->pid);
-                $page    = PageModel::findById($article->pid);
+                if ($article === null) {
+                    continue;
+                }
+
+                $page = PageModel::findById($article->pid);
+                if ($page === null) {
+                    continue;
+                }
 
                 $item['href']  = $page->getFrontendUrl();
                 $item['title'] = $page->pageTitle ?: $page->title;
@@ -78,6 +98,11 @@ final class HookSubscriber
         return $compiled;
     }
 
+    /**
+     * @param list<array{comment: CommentsModel}> $items
+     *
+     * @return list<array{comment: CommentsModel, href?: string, title?: string}>
+     */
     #[AsHook('hofff_comments_compile')]
     public function hookCommentsCompileNews(array $items): array
     {
@@ -95,6 +120,9 @@ final class HookSubscriber
 
             try {
                 $news = NewsModel::findById($item['comment']->parent);
+                if ($news === null) {
+                    continue;
+                }
 
                 $item['href']  = ContaoNewsUtil::getNewsURL($news);
                 $item['title'] = $news->headline;

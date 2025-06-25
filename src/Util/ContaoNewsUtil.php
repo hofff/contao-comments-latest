@@ -4,42 +4,51 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\CommentsLatest\Util;
 
+use Contao\Model\Collection;
 use Contao\News;
 use Contao\NewsArchiveModel;
 use Contao\NewsModel;
 use Contao\PageModel;
 
-/**
- * @author Oliver Hoff <oliver@hofff.com>
- */
+use function assert;
+
 final class ContaoNewsUtil
 {
-
-    /**
-     * @param NewsModel $news
-     *
-     * @return string
-     */
     public static function getNewsURL(NewsModel $news): string
     {
         return News::generateNewsUrl($news);
     }
 
-    /**
-     * @param array $ids
-     *
-     * @return void
-     */
+    /** @param list<int> $ids */
     public static function prefetchNewsModels(array $ids): void
     {
-        $archives = [];
-        foreach (NewsModel::findMultipleByIds(array_values($ids)) as $news) {
+        $archives   = [];
+        $collection = NewsModel::findMultipleByIds($ids);
+        if (! $collection instanceof Collection) {
+            return;
+        }
+
+        foreach ($collection as $news) {
+            assert($news instanceof NewsModel);
+
             $archives[] = $news->pid;
         }
 
+        $collection = NewsArchiveModel::findMultipleByIds($archives);
+        if (! $collection instanceof Collection) {
+            return;
+        }
+
         $pages = [];
-        foreach (NewsArchiveModel::findMultipleByIds($archives) as $archive) {
-            $archive->jumpTo && $pages[] = $archive->jumpTo;
+
+        foreach ($collection as $archive) {
+            assert($archive instanceof NewsArchiveModel);
+
+            if (! $archive->jumpTo) {
+                continue;
+            }
+
+            $pages[] = $archive->jumpTo;
         }
 
         PageModel::findMultipleByIds($pages);

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 $GLOBALS['TL_LANG']['MOD']['hofff_comments_latest']
-	= 'hofff.com - Latest comments';
+    = 'hofff.com - Latest comments';
 
 $GLOBALS['TL_LANG']['FMD']['hofff_comments_latest'][0]
-	= 'Latest comments';
+    = 'Latest comments';
 $GLOBALS['TL_LANG']['FMD']['hofff_comments_latest'][1]
-	= 'Displays a list of most recent comments';
+    = 'Displays a list of most recent comments';

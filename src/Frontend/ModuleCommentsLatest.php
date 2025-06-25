@@ -6,26 +6,34 @@ namespace Hofff\Contao\CommentsLatest\Frontend;
 
 use Contao\BackendTemplate;
 use Contao\CommentsModel;
+use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\Model\Collection;
 use Contao\Module;
+use Override;
+use Symfony\Component\HttpFoundation\RequestStack;
+
+use function assert;
 use function call_user_func;
 use function is_array;
 
-/**
- * @author Oliver Hoff <oliver@hofff.com>
- */
+/** @psalm-suppress PropertyNotSetInConstructor */
 final class ModuleCommentsLatest extends Module
 {
-    /**
-     * @var string
-     */
+    /** @var string */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected $strTemplate = 'mod_hofff_comments_latest';
 
-    /**
-     * @see Module::generate
-     */
+    /** {@inheritDoc} */
+    #[Override]
     public function generate(): string
     {
-        if (TL_MODE === 'BE') {
+        $requestStack = self::getContainer()->get('request_stack');
+        assert($requestStack instanceof RequestStack);
+        $request      = $requestStack->getCurrentRequest();
+        $scopeMatcher = self::getContainer()->get('contao.routing.scope_matcher');
+        assert($scopeMatcher instanceof ScopeMatcher);
+
+        if ($request && $scopeMatcher->isBackendRequest($request)) {
             $tpl           = new BackendTemplate('be_wildcard');
             $tpl->wildcard = '### LATEST COMMENTS ###';
             $tpl->title    = $this->headline;
@@ -39,9 +47,8 @@ final class ModuleCommentsLatest extends Module
         return parent::generate();
     }
 
-    /**
-     * @see Module::compile
-     */
+    /** {@inheritDoc} */
+    #[Override]
     protected function compile(): void
     {
         $items = [];
@@ -59,6 +66,9 @@ final class ModuleCommentsLatest extends Module
 
     /**
      * @return array<CommentsModel>
+     *
+     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress MoreSpecificReturnType
      */
     public function fetchComments(): array
     {
@@ -67,30 +77,39 @@ final class ModuleCommentsLatest extends Module
             [
                 'limit' => $this->numberOfItems,
                 'order' => 'tl_comments.date DESC',
-            ]
+            ],
         );
 
-        return $comments ? $comments->getModels() : [];
+        if ($comments instanceof Collection) {
+            return $comments->getModels();
+        }
+
+        return [];
     }
 
     /**
-     * @param array
+     * @param list<array{comment: CommentsModel}> $items
      *
-     * @return array
+     * @return list<array{comment: CommentsModel, ...}>
+     *
+     * @psalm-suppress MixedReturnStatement
      */
     protected function executeHook(array $items): array
     {
+        /** @psalm-suppress MixedArrayAccess */
         $hooks = &$GLOBALS['TL_HOOKS']['hofff_comments_compile'];
 
-        if (!isset($hooks) || !is_array($hooks)) {
+        if (! isset($hooks) || ! is_array($hooks)) {
             return $items;
         }
 
+        /** @psalm-var array{0: string|object, 1: string} $callback */
         foreach ($hooks as $callback) {
+            /** @psalm-var list<array{comment: CommentsModel, ...}> $items */
             $items = call_user_func(
-                [static::importStatic($callback[0]), $callback[1]],
+                [self::importStatic($callback[0]), $callback[1]],
                 $items,
-                $this
+                $this,
             );
         }
 
