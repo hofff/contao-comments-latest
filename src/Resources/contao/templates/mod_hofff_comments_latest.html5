@@ -1,7 +1,5 @@
-<?php
-$format = $GLOBALS['objPage'] ? $GLOBALS['objPage']->datimFormat : Config::get('datimFormat');
-?>
-<?php $this->extend('block_unsearchable'); ?>
+<?php $format = $GLOBALS['objPage'] ? $GLOBALS['objPage']->datimFormat : \Contao\Config::get('datimFormat') ?>
+<?php $this->extend('block_unsearchable') ?>
 
 <?php $this->block('content'); ?>
 
