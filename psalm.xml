@@ -6,6 +6,15 @@
             <directory name="src/Resources/contao"/>
         </ignoreFiles>
     </projectFiles>
+    
+    <issueHandlers>
+        <DeprecatedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Contao\News::generateNewsUrl"/>
+                <referencedMethod name="Contao\PageModel::getFrontendUrl"/>
+            </errorLevel>
+        </DeprecatedMethod>
+    </issueHandlers>
 
     <universalObjectCrates>
         <class name="Contao\BackendTemplate"/>

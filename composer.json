@@ -38,8 +38,8 @@
     "phpcq/runner-bootstrap": "@dev"
   },
   "conflict": {
-    "contao/manager-plugin": "<2.1 || >= 3.0",
-    "contao/news-bundle": "<4.13 || >=5.0"
+    "contao/manager-plugin": "<2.1 || >=3.0",
+    "contao/news-bundle": "<4.13 || >=6.0"
   },
   "suggest": {
     "contao/news-bundle": "Install news bundle for fetching latest comments of the news"

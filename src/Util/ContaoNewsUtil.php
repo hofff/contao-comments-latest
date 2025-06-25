@@ -10,8 +10,6 @@ use Contao\NewsArchiveModel;
 use Contao\NewsModel;
 use Contao\PageModel;
 
-use function assert;
-
 final class ContaoNewsUtil
 {
     public static function getNewsURL(NewsModel $news): string
@@ -29,8 +27,6 @@ final class ContaoNewsUtil
         }
 
         foreach ($collection as $news) {
-            assert($news instanceof NewsModel);
-
             $archives[] = $news->pid;
         }
 
@@ -42,8 +38,6 @@ final class ContaoNewsUtil
         $pages = [];
 
         foreach ($collection as $archive) {
-            assert($archive instanceof NewsArchiveModel);
-
             if (! $archive->jumpTo) {
                 continue;
             }

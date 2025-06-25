@@ -7,6 +7,7 @@ namespace Hofff\Contao\CommentsLatest\Frontend;
 use Contao\BackendTemplate;
 use Contao\CommentsModel;
 use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\FrontendTemplate;
 use Contao\Model\Collection;
 use Contao\Module;
 use Override;
@@ -16,7 +17,10 @@ use function assert;
 use function call_user_func;
 use function is_array;
 
-/** @psalm-suppress PropertyNotSetInConstructor */
+/**
+ * @property FrontendTemplate $Template
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 final class ModuleCommentsLatest extends Module
 {
     /** @var string */
